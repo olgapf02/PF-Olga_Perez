@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="{{url_for('static',filename='style-h.css')}}">
+    <link rel="stylesheet" href="{{url_for('static',filename='script-h.js')}}">
+    <title>Historial de imágenes</title>
+  </head>
+  <body>
+    <button id="button">Atras</button>
+    <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Fecha</th>
+            <th>Imagen</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for imagen in imagenes %}
+          <tr>
+            <td>{{ imagen.0 }}</td>
+            <td>{{ imagen.1 }}</td>
+            <td>{{ imagen.2 }}</td></td><!-- es para que coja la url de la imagen enseñando la url no la imagen -->
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+  </body>
+</html>

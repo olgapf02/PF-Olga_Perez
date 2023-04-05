@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="{{url_for('static',filename='style.css')}}">
+        <!-- <link rel="stylesheet" href="{{url_for('static',filename='script.js')}}"> -->
+    </head>
+    <header>
+        <nav class="nav">
+            <ul classs ="enlaces">
+                <li class=" historia"><a href="/historial" >historial </a></li>
+                <li class=" img"> <a href="/insertar-imagen-dia" >insertar-imagen-del-dia</a></li>
+            </ul> 
+        </nav>
+    </header>
+    <body>
+        <!-- <p>{{img}}</p> --><!-- es para que se muestre por pantalla en formato json -->
+        <div class="container">
+            <div>
+                <h1>{{img['title']}}</h1>
+            </div>
+    
+            <div id="fecha">
+                <h1 >{{img['date']}}</h1>
+            </div>
+            <div class="img">
+                <img src="{{img['url']}}" alt=""><!-- es para que coja la url de la imagen enseñandola -->
+            </div>
+    
+            <div class="ex">
+                <p>{{img['explanation']}}</p>
+            </div>
+    
+        </div>
+          
+    </body>
+</html>

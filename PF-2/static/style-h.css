@@ -1,0 +1,27 @@
+tr{
+    text-align: center;
+}
+
+tr:hover {background-color: rgb(0, 148, 216);}
+
+th, td {
+    border-bottom: 1px solid #000000;
+  }
+
+table {
+	width: 50%;
+	height: 30px;
+    border: solid 1px black;
+
+}
+#button {
+    background-color: #58b3ca; /* color de fondo */
+    border: none; /* borde */
+    color: white; /* color del texto */
+    padding: 15px 32px; /* espaciado */
+    text-align: center; /* alineación del texto */
+    font-size: 16px; /* tamaño de fuente */
+    margin: 4px 2px; /* márgenes */
+    cursor: pointer; /* cursor */
+  }
+  
