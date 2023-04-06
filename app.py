@@ -14,6 +14,7 @@ import requests
 # ###################################################################
 app = Flask(__name__)
 
+# 1r etapa: extracción de los datos
 # funcion para poder cojer la api
 def get_img():
     # Endpoint de la imagen astronómica del día de la NASA
@@ -43,6 +44,7 @@ app.config['MYSQL_DB'] = 'imagenes'
 mysql = MySQL(app)
 ####################################################################################################
 # rutas
+# 2n etapa: visualización
 ####################################################################################################
 @app.route('/')
 def portada():
@@ -79,6 +81,6 @@ def historial():
     print(imagenes)
     cursor.close()
     return render_template('historial.html',imagenes=imagenes)
-   
+####################################################################################################  
 app.run(host='Localhost', port=5000, debug=False)
 
