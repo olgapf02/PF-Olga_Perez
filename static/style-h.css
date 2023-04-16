@@ -17,10 +17,37 @@ table {
 #button {
     background-color: #58b3ca; /* color de fondo */
     border: none; /* borde */
-    color: white; /* color del texto */
+    color: black; /* color del texto */
     padding: 15px 32px; /* espaciado */
     text-align: center; /* alineación del texto */
     font-size: 16px; /* tamaño de fuente */
+    margin: 4px 2px; /* márgenes */
+    cursor: pointer; /* cursor */
+  }
+
+#button:hover{
+  background-color: #b1e5f2;
+}
+header{
+  background-color: rgba(191, 204, 254, 0.903);
+  /* padding: 1em; */
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  align-items: center;
+}
+a{
+  text-decoration:none;
+  color:white;
+  font-size: 16px; 
+}
+
+li{
+  background-color: #58b3ca; /* color de fondo */
+    border: none; /* borde */
+    padding: 15px 32px; /* espaciado */
+    text-align: center; /* alineación del texto */
+    display: inline-block; /* visualización en línea */
     margin: 4px 2px; /* márgenes */
     cursor: pointer; /* cursor */
   }

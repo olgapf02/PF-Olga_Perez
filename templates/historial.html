@@ -5,6 +5,14 @@
     <link rel="stylesheet" href="{{url_for('static',filename='script-h.js')}}">
     <title>Historial de imágenes</title>
   </head>
+  <header>
+    <nav class="nav">
+        <ul classs ="enlaces">
+            <li class=" historia"><a href="/" >inicio </a></li>
+            <li class=" img"> <a href="/insertar-imagen-dia" >insertar-imagen-del-dia</a></li>
+        </ul> 
+    </nav>
+  </header>   
   <body>
     <button id="button">Atras</button>
     <table>
@@ -20,7 +28,8 @@
           <tr>
             <td>{{ imagen.0 }}</td>
             <td>{{ imagen.1 }}</td>
-            <td>{{ imagen.2 }}</td></td><!-- es para que coja la url de la imagen enseñando la url no la imagen -->
+            <td>{{ imagen.2 }}</td>
+            <td>{{ imagen.3 }}</td><!-- es para que coja la url de la imagen enseñando la url no la imagen -->
           </tr>
           {% endfor %}
         </tbody>

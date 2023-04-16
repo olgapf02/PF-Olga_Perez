@@ -14,7 +14,7 @@ import requests
 # ###################################################################
 app = Flask(__name__)
 
-# 1r etapa: extracción de los datos
+# 1r etapa: importacion API
 # funcion para poder cojer la api
 def get_img():
     # Endpoint de la imagen astronómica del día de la NASA
@@ -24,7 +24,7 @@ def get_img():
     # Hacer la solicitud GET a la API de la NASA
     response = requests.get(url, params=parametros)
     data = response.json()# parsea la info en un formato JSON y lo muestra por consola
-
+# 2n etapa: extracción de los datos
     # Imprimir los datos de la imagen del día
     print('Título:', data['title'])
     print('Fecha:', data['date'])
@@ -32,6 +32,37 @@ def get_img():
     print('URL imagen:', data['url'])
     
     return data  # retornamos la variable para poder imprimir la imagen del dia
+####################################################################################################
+# analizar imagenes de que tipo son
+# que quiero analizar:
+# crear una funcion
+# def analizar_imagen():
+#     # llamar a la api
+#     data=get_img()
+#     Título=data['title']
+#     Explicacion=data['explanation']
+# #clasificar la ia imagen 
+#     tipo= "desconocido"
+#     if "galaxy" in data['title'].lower or 'galaxy' in data['explanation'].lower():
+#         tipo="galaxia"
+
+    # tipo = 'Desconocido'
+    # if 'galaxy' in data['title'].lower() or 'galaxia' in data['explanation'].lower():
+    #     tipo = 'Galaxia'
+    # elif 'planet' in data['title'].lower() or 'planeta' in data['explanation'].lower():
+    #     tipo = 'Planeta'
+    # elif 'nebula' in data['title'].lower() or 'nebulosa' in data['explanation'].lower():
+    #     tipo = 'Nebulosa'
+        
+    # # se devuelve un diccionario con los datos de la imagen y su tipo
+    # return {'titulo': data['title'], 'fecha': data['date'], 'explicacion': data['explanation'], 'url': data['url'], 'tipo': tipo}
+
+
+# 2.- hacer un diccionario para ordenarlo
+# 3.- contar con que frecuencia hay cada tipo de imagen
+# 4.-devolverlo en orden =diccionario
+
+
 ####################################################################################################
 ####################################################################################################
 # mysql
@@ -44,7 +75,7 @@ app.config['MYSQL_DB'] = 'imagenes'
 mysql = MySQL(app)
 ####################################################################################################
 # rutas
-# 2n etapa: visualización
+# 3r etapa: visualización
 ####################################################################################################
 @app.route('/')
 def portada():
@@ -64,7 +95,7 @@ def guardar_imagen():
 # si esta mensaje de que ya esta
     if resultado:
         mensaje='La imagen ya está guardada en la BD.'
-#  si no insertarla y poner el mensaje de que ya esta
+#  si no insertarla y poner el mensaje de que se a guardado
     else:
         cursor.execute("INSERT INTO imagen (fecha,url) VALUES (%s,%s)", [fecha,url])
         cursor.connection.commit()
@@ -75,8 +106,10 @@ def guardar_imagen():
 
 @app.route('/historial')
 def historial():
+    # buscar nuestra tabla para ver que hay en ella
     cursor=mysql.connection.cursor()
     cursor.execute("SELECT * FROM imagen")
+    # guardar y printar lo que haya en ella
     imagenes = cursor.fetchall()# capta el resultado de la consulta
     print(imagenes)
     cursor.close()
