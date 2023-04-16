@@ -9,9 +9,8 @@ th, td {
   }
 
 table {
-	width: 50%;
-	height: 30px;
-    border: solid 1px black;
+  width: 100%;
+  border: solid 1px black;
 
 }
 #button {

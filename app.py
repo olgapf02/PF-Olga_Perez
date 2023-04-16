@@ -28,7 +28,7 @@ def get_img():
     # Imprimir los datos de la imagen del día
     print('Título:', data['title'])
     print('Fecha:', data['date'])
-    print('Explicación:', data['explanation'])
+    print('Explicacion:', data['explanation'])
     print('URL imagen:', data['url'])
     
     return data  # retornamos la variable para poder imprimir la imagen del dia
@@ -46,22 +46,9 @@ def get_img():
 #     if "galaxy" in data['title'].lower or 'galaxy' in data['explanation'].lower():
 #         tipo="galaxia"
 
-    # tipo = 'Desconocido'
-    # if 'galaxy' in data['title'].lower() or 'galaxia' in data['explanation'].lower():
-    #     tipo = 'Galaxia'
-    # elif 'planet' in data['title'].lower() or 'planeta' in data['explanation'].lower():
-    #     tipo = 'Planeta'
-    # elif 'nebula' in data['title'].lower() or 'nebulosa' in data['explanation'].lower():
-    #     tipo = 'Nebulosa'
-        
-    # # se devuelve un diccionario con los datos de la imagen y su tipo
-    # return {'titulo': data['title'], 'fecha': data['date'], 'explicacion': data['explanation'], 'url': data['url'], 'tipo': tipo}
-
-
 # 2.- hacer un diccionario para ordenarlo
 # 3.- contar con que frecuencia hay cada tipo de imagen
 # 4.-devolverlo en orden =diccionario
-
 
 ####################################################################################################
 ####################################################################################################
@@ -88,6 +75,7 @@ def guardar_imagen():
     data=get_img()
     fecha=data['date']
     url=data['url']
+    Explicacion=data['explanation']
 # comprobar/buscar si la img esta en la BD
     cursor=mysql.connection.cursor()
     cursor.execute("SELECT fecha FROM imagen WHERE fecha= %s ",[fecha])
@@ -97,7 +85,7 @@ def guardar_imagen():
         mensaje='La imagen ya está guardada en la BD.'
 #  si no insertarla y poner el mensaje de que se a guardado
     else:
-        cursor.execute("INSERT INTO imagen (fecha,url) VALUES (%s,%s)", [fecha,url])
+        cursor.execute("INSERT INTO imagen (fecha,url,explicacion) VALUES (%s,%s,%s)", [fecha,url,Explicacion])
         cursor.connection.commit()
         mensaje='La imagen ha sido guardada correctamente en la BD.'
         cursor.close()
