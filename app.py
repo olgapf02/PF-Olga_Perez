@@ -34,46 +34,47 @@ def get_img():
     
     return data  # retornamos la variable para poder imprimir la imagen del dia
 ####################################################################################################
-# # analizar imagenes que tipos hay
-# def analizar_imagen():
-# # llamar a la api
-#     data=get_img()
-#     titulo=data['title']
-#     Explicacion=data['explanation']
-# #clasificar la ia imagen segun el tipo
-#     tipo= "desconocido" # variable para el almacenamiento de la imagen
-#     if "galaxy" in titulo.lower or 'galaxy' in Explicacion.lower():
-#         tipo="galaxia"
-#     elif "Planet" in titulo.lower or 'Planet' in Explicacion.lower():
-#         tipo="planeta"
-#     elif "Nebula" in titulo.lower or 'Nebula' in Explicacion.lower():
-#         tipo="Nebulosa"
-#     elif "Lightning" in titulo.lower or 'Lightning' in Explicacion.lower():
-#         tipo="Iluminacion"
-#     elif "Stars" in titulo.lower or 'stars' in Explicacion.lower():
-#         tipo="Estrella"
-#     elif "Eclipse" in titulo.lower or 'eclipse' in Explicacion.lower():
-#         tipo="Eclipse"
-#     elif "Storm" in titulo.lower or 'storm' in Explicacion.lower():
-#         tipo="Tormenta"
+# "bajarse" imagenes de todo un año
+def img_año(fecha_inicial,fecha_final):
+# llamar a los diferentes datos de la api que necesitamos
+    data=get_img()
+    fecha_inicial=data['start_date']
+    fecha_final=data['end_date']
+    titulo=data['title']
+    Explicacion=data['explanation']
+# encontrar de que tipo es cada imagen
+    tipo= "desconocido" # variable para el almacenamiento de la imagen
+    if "galaxy" in titulo.lower or 'galaxy' in Explicacion.lower():
+        tipo="galaxia"
+    elif "Planet" in titulo.lower or 'Planet' in Explicacion.lower():
+        tipo="planeta"
+    elif "Nebula" in titulo.lower or 'Nebula' in Explicacion.lower():
+        tipo="Nebulosa"
+    elif "Lightning" in titulo.lower or 'Lightning' in Explicacion.lower():
+        tipo="Iluminacion"
+    elif "Stars" in titulo.lower or 'stars' in Explicacion.lower():
+        tipo="Estrella"
+    elif "Eclipse" in titulo.lower or 'eclipse' in Explicacion.lower():
+        tipo="Eclipse"
+    elif "Storm" in titulo.lower or 'storm' in Explicacion.lower():
+        tipo="Tormenta"
 
-# hacer un diccionario para ordenarlo
-    # return {get_img,tipo}
+# insertar las imagenes en la bd
+    cursor=mysql.connection.cursor()
+    resultado = cursor.fetchone()
+    sql = "INSERT INTO imagenes ( fecha,url,explicacion,tipo) VALUES (%s, %s, %s, %s)"
+    val = (resultado['date'], resultado['url'], resultado['explanation'], tipo)
+    cursor.execute(sql, val)
+    resultado = cursor.fetchone()
 
-# segunda parte del analisis
-# contar con que frecuencia hay cada tipo de imagen
-# def contar_tipo_img():
-# entrar en la bd y contar cuantas img hay
-# 
-    # cursor = mysql.connection.cursor()
-    # cursor.execute("SELECT tipo, COUNT(*) AS cantidad FROM imagen GROUP BY tipo ORDER BY cantidad DESC")
-    # resultados = cursor.fetchall()
-    # cursor.close()
-    
-    # # se devuelve un diccionario con los tipos de imagen y su frecuencia
-    # return {resultado[0]: resultado[1] for resultado in resultados}
+img_año('2022-01-01', '2022-12-31')
 
-# 4.-devolverlo en orden =diccionario
+# ###################################################################
+# crear una grafica 
+# ###################################################################
+# enseñar la grafica con un app.route
+
+
 
 ####################################################################################################
 ####################################################################################################
@@ -127,12 +128,12 @@ def historial():
     cursor.close()
     # enseñar y mandar nuestro interior de la bd a un html para poder enseñarlo
     return render_template('historial.html',imagenes=imagenes)
-#####################################################
+####################################################
 # @app.route('/analisis')
 # def analisis():
 
 
-####################################################################################################
-####################################################################################################
+###################################################################################################
+###################################################################################################
 app.run(host='Localhost', port=5000, debug=False)
 
