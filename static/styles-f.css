@@ -1,33 +1,27 @@
 table.dataframe td {
-    background-color: red;
-}
-/* 
-td{
     border: solid 1px black;
 }
-
-tr{
-    text-align: center;
-    
-}
-
-table {
-	width: 50%;
-	height: 90px;
+table.dataframe tr {
     text-align: center;
 }
-
-h1{
-    text-transform: uppercase;
+table.dataframe table {
     text-align: center;
-    font-family: "Lucida Console", "Courier New", monospace;
-    font-size: 350%
+}
+table.dataframe th {
+    text-align: center;
+}
+table.dataframe thead {
+    text-align: center;
+    background-color: rgb(79, 169, 233);
+    height: 100px;
 }
 
-
-.color{
-    background-color:rgb(3, 71, 21);
-    font-weight: bold;
-    color: aliceblue;
-} */
+header{
+    background-color: rgba(191, 204, 254, 0.903);
+    /* padding: 1em; */
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    align-items: center;
+  }
 

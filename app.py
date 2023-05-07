@@ -94,11 +94,12 @@ def get_img_ano():
     key = "dD3rq2KBZ3IonoPglO50EyY5R1ielcmBT1gbO1Jv"
     # extracción de los datos
     start_date = "2022-01-01"
-    end_date = "2022-01-31"
+    end_date = "2023-01-01"
     # Hacer la solicitud GET a la API de la NASA
     response = requests.get(url,{'api_key': key, 'start_date': start_date, 'end_date': end_date})
     # print(response.json()) 
 
+# crearemos una lista para guardar los diferentes tipos que tienen las imagenes recojidas de la api
     lista_imagenes = []
     tipo = "desconocido"
     for data in response.json():
@@ -116,6 +117,7 @@ def get_img_ano():
                 tipo="Eclipse"
             elif "Storm" in data['title'].lower() or 'storm' in data['explanation'].lower():
                 tipo="Tormenta"
+                # despues una vez teniendo nuestra lista lo transformaremos a un diccionario
             imagenes_dicc = {
                     "title": data["title"],
                     "date": data["date"],
@@ -123,6 +125,7 @@ def get_img_ano():
                     "url": data["url"],
                     "tipo": tipo
                 }  
+            # luego diremos que la lista creada es igual al formateo del diccionario
             lista_imagenes.append(imagenes_dicc) 
             # esto nos servira para printar todas las imagenes pedidas en un año en un formato json
             # for image in lista_imagenes:
@@ -131,22 +134,37 @@ def get_img_ano():
     # aqui creamos un dataframe a partir de las columnas que queremos y con los datos recogidos en la api
     df = pd.DataFrame(lista_imagenes, columns=["title", "date", "explanation", "url", "tipo"])
     # print(df)
-
-    
-
+    # en este render daremos una variable para que printe nuestro df en el html
     return render_template('fotos_ano.html',lista =df.to_html())
-
 ###################################################################################################
-###################################################################################################
-# crear una grafica de cada mes
-#cojer cada mes y enseñar su grafica  con un formulario
-
 # ###################################################################
 # enseñar la grafica con un app.route
-# @app.route('/graficas')
+# @app.route('/grafica')
 # def grafica():
+# # Crear figura y eje
+#     fig, ax = plt.subplots()
 
+#     # Iterar sobre los tipos de imágenes
+#     for tipo in df['tipo'].unique():
+#         # Obtener los datos para este tipo de imagen
+#         data = groupby.loc[tipo]
+#         # Crear la barra para este tipo de imagen
+#         ax.bar(data.index, data['title'], label=tipo)
+
+#     # Agregar leyenda y etiquetas de eje
+#     ax.legend()
+#     ax.set_xlabel('Año')
+#     ax.set_ylabel('Cantidad de imágenes')
+#     ax.set_title('Cantidad de imágenes por tipo y año')
+
+#     # Mostrar la gráfica
+#     plt.show()
+    # return render_template('grafica.html')
 
 ###################################################################
 app.run(host='Localhost', port=5000, debug=False)
 
+###################################################################################################
+# mejoras
+# crear una grafica de cada mes
+#cojer cada mes y enseñar su grafica  con un formulario
