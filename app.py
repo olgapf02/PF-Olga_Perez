@@ -9,12 +9,13 @@ from flask import Flask, render_template
 from flask_mysqldb import MySQL
 import requests
 import matplotlib.pyplot as plt
+import pandas as pd
+import json
 # ###################################################################
 # https://api.nasa.gov/planetary/apod?api_key=dD3rq2KBZ3IonoPglO50EyY5R1ielcmBT1gbO1Jv   
 # aqui estaremos haciendo una consulta a la api de la nasa con nuestra apikey que nos saldra en formato json
 # ###################################################################
 app = Flask(__name__)
-
 # 1r etapa: importacion API
 # funcion para poder cojer la api
 def get_img():
@@ -23,7 +24,7 @@ def get_img():
     # Parámetros de consulta
     parametros = {'api_key': 'dD3rq2KBZ3IonoPglO50EyY5R1ielcmBT1gbO1Jv'}
     # Hacer la solicitud GET a la API de la NASA
-    response = requests.get(url, params=parametros)
+    response = requests.get(url, parametros)
     data = response.json()# parsea la info en un formato JSON y lo muestra por consola
 # 2n etapa: extracción de los datos
     # Imprimir los datos de la imagen del día
@@ -34,52 +35,9 @@ def get_img():
     
     return data  # retornamos la variable para poder imprimir la imagen del dia
 ####################################################################################################
-# "bajarse" imagenes de todo un año
-def img_año(fecha_inicial,fecha_final):
-# llamar a los diferentes datos de la api que necesitamos
-    data=get_img()
-    fecha_inicial=data['start_date']
-    fecha_final=data['end_date']
-    titulo=data['title']
-    Explicacion=data['explanation']
-# encontrar de que tipo es cada imagen
-    tipo= "desconocido" # variable para el almacenamiento de la imagen
-    if "galaxy" in titulo.lower or 'galaxy' in Explicacion.lower():
-        tipo="galaxia"
-    elif "Planet" in titulo.lower or 'Planet' in Explicacion.lower():
-        tipo="planeta"
-    elif "Nebula" in titulo.lower or 'Nebula' in Explicacion.lower():
-        tipo="Nebulosa"
-    elif "Lightning" in titulo.lower or 'Lightning' in Explicacion.lower():
-        tipo="Iluminacion"
-    elif "Stars" in titulo.lower or 'stars' in Explicacion.lower():
-        tipo="Estrella"
-    elif "Eclipse" in titulo.lower or 'eclipse' in Explicacion.lower():
-        tipo="Eclipse"
-    elif "Storm" in titulo.lower or 'storm' in Explicacion.lower():
-        tipo="Tormenta"
-
-# insertar las imagenes en la bd
-    cursor=mysql.connection.cursor()
-    resultado = cursor.fetchone()
-    sql = "INSERT INTO imagenes ( fecha,url,explicacion,tipo) VALUES (%s, %s, %s, %s)"
-    val = (resultado['date'], resultado['url'], resultado['explanation'], tipo)
-    cursor.execute(sql, val)
-    resultado = cursor.fetchone()
-
-img_año('2022-01-01', '2022-12-31')
-
-# ###################################################################
-# crear una grafica 
-# ###################################################################
-# enseñar la grafica con un app.route
-
-
-
-####################################################################################################
-####################################################################################################
 # mysql
-# configuracion de la base de datos
+####################################################################################################
+# nos conectaoms a la base de datos
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = 'gaol1920'
@@ -88,7 +46,6 @@ app.config['MYSQL_DB'] = 'imagenes'
 mysql = MySQL(app)
 ####################################################################################################
 # rutas
-# 3r etapa: visualización
 ####################################################################################################
 @app.route('/')
 def portada():
@@ -116,7 +73,7 @@ def guardar_imagen():
         mensaje='La imagen ha sido guardada correctamente en la BD.'
         cursor.close()
     return render_template('insertar.html', mensaje=mensaje)
-#####################################################
+##########################################################################################################
 @app.route('/historial')
 def historial():
     # buscar nuestra tabla para ver que hay en ella
@@ -128,12 +85,68 @@ def historial():
     cursor.close()
     # enseñar y mandar nuestro interior de la bd a un html para poder enseñarlo
     return render_template('historial.html',imagenes=imagenes)
-####################################################
-# @app.route('/analisis')
-# def analisis():
+#########################################################################################################
+@app.route('/imagenes-mes')
+def get_img_ano():
+    # Endpoint de la imagen astronómica del día de la NASA
+    url='https://api.nasa.gov/planetary/apod'# parsea la info
+    # Parámetros de consulta
+    key = "dD3rq2KBZ3IonoPglO50EyY5R1ielcmBT1gbO1Jv"
+    # extracción de los datos
+    start_date = "2022-01-01"
+    end_date = "2022-01-31"
+    # Hacer la solicitud GET a la API de la NASA
+    response = requests.get(url,{'api_key': key, 'start_date': start_date, 'end_date': end_date})
+    # print(response.json()) 
 
+    lista_imagenes = []
+    tipo = "desconocido"
+    for data in response.json():
+            if "galaxy" in data['title'].lower() or 'galaxy' in data['explanation'].lower():
+                tipo="galaxia"
+            elif "Planet" in data['title'].lower() or 'Planet' in data['explanation'].lower():
+                tipo="planeta"
+            elif "Nebula" in data['title'].lower() or 'Nebula' in data['explanation'].lower():
+                tipo="Nebulosa"
+            elif "Lightning" in data['title'].lower() or 'Lightning' in data['explanation'].lower():
+                tipo="Iluminacion"
+            elif "Stars" in data['title'].lower() or 'stars' in data['explanation'].lower():
+                tipo="Estrella"
+            elif "Eclipse" in data['title'].lower() or 'eclipse' in data['explanation'].lower():
+                tipo="Eclipse"
+            elif "Storm" in data['title'].lower() or 'storm' in data['explanation'].lower():
+                tipo="Tormenta"
+            imagenes_dicc = {
+                    "title": data["title"],
+                    "date": data["date"],
+                    "explanation": data["explanation"],
+                    "url": data["url"],
+                    "tipo": tipo
+                }  
+            lista_imagenes.append(imagenes_dicc) 
+            # esto nos servira para printar todas las imagenes pedidas en un año en un formato json
+            # for image in lista_imagenes:
+            #     print(json.dumps(image)) 
+####################################################################################################
+    # aqui creamos un dataframe a partir de las columnas que queremos y con los datos recogidos en la api
+    df = pd.DataFrame(lista_imagenes, columns=["title", "date", "explanation", "url", "tipo"])
+    # print(df)
+
+    
+
+    return render_template('fotos_ano.html',lista =df.to_html())
 
 ###################################################################################################
 ###################################################################################################
+# crear una grafica de cada mes
+#cojer cada mes y enseñar su grafica  con un formulario
+
+# ###################################################################
+# enseñar la grafica con un app.route
+# @app.route('/graficas')
+# def grafica():
+
+
+###################################################################
 app.run(host='Localhost', port=5000, debug=False)
 
