@@ -85,8 +85,8 @@ def historial():
     cursor.close()
     # enseñar y mandar nuestro interior de la bd a un html para poder enseñarlo
     return render_template('historial.html',imagenes=imagenes)
-#########################################################################################################
-@app.route('/imagenes-mes')
+################################################################
+@app.route('/imagenes-año')
 def get_img_ano():
     # Endpoint de la imagen astronómica del día de la NASA
     url='https://api.nasa.gov/planetary/apod'# parsea la info
@@ -130,36 +130,42 @@ def get_img_ano():
             # esto nos servira para printar todas las imagenes pedidas en un año en un formato json
             # for image in lista_imagenes:
             #     print(json.dumps(image)) 
-####################################################################################################
+##########################
     # aqui creamos un dataframe a partir de las columnas que queremos y con los datos recogidos en la api
     df = pd.DataFrame(lista_imagenes, columns=["title", "date", "explanation", "url", "tipo"])
     # print(df)
-    # en este render daremos una variable para que printe nuestro df en el html
+
+    # escriviremos un archivo csv para tener el df mas manejable.
+    # df.to_csv('imagenes-año.csv', index=False)
+
+    # por ultimo en este render daremos una variable para que printe nuestro df en el html
     return render_template('fotos_ano.html',lista =df.to_html())
 ###################################################################################################
-# ###################################################################
 # enseñar la grafica con un app.route
-# @app.route('/grafica')
-# def grafica():
-# # Crear figura y eje
-#     fig, ax = plt.subplots()
+@app.route('/grafica')
+def grafica():
+    df = pd.read_csv('imagenes-año.csv')
+    # Calcular el recuento de cada tipo de imagen
+    conteo_tipos = df["tipo"].value_counts()
 
-#     # Iterar sobre los tipos de imágenes
-#     for tipo in df['tipo'].unique():
-#         # Obtener los datos para este tipo de imagen
-#         data = groupby.loc[tipo]
-#         # Crear la barra para este tipo de imagen
-#         ax.bar(data.index, data['title'], label=tipo)
+    # Creacion de la  gráfica de barras
+    fig, ax = plt.subplots()
+    ax.bar(conteo_tipos.index, conteo_tipos.values)
 
-#     # Agregar leyenda y etiquetas de eje
-#     ax.legend()
-#     ax.set_xlabel('Año')
-#     ax.set_ylabel('Cantidad de imágenes')
-#     ax.set_title('Cantidad de imágenes por tipo y año')
+    # Personalizacion de la gráfica
+    ax.set_title("Tipos de imágenes en el año")
+    ax.set_xlabel("Tipo de imagen")
+    ax.set_ylabel("Cantidad")
 
-#     # Mostrar la gráfica
-#     plt.show()
-    # return render_template('grafica.html')
+    # Guardar la gráfica como archivo PNG
+    plt.savefig('grafica.png')
+
+    # Cerrar la figura
+    plt.close()
+    # En este ejemplo, la línea plt.savefig('grafica.png') guarda la gráfica en un archivo llamado "grafica.png" en el directorio actual.
+
+    return render_template('grafica.html')
+
 
 ###################################################################
 app.run(host='Localhost', port=5000, debug=False)
