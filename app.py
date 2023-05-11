@@ -137,11 +137,13 @@ def get_img_ano():
     # print(df)
     # escriviremos un archivo csv para tener el df mas manejable.
     # df.to_csv('imagenes-año.csv', index=False)
-    # por ultimo en este render daremos una variable para que printe nuestro df en el html
+    # por ultimo en este render daremos una variable para que pueda printar nuestro df en el html
     return render_template('fotos_ano.html',lista =df.to_html())
 
-###################################################################################################
-# en esta funcion crearemos las diferentes grficas que necesitamos 
+####################################################################################################
+# graficas de todo un año  de mes a mes del año 2022
+####################################################################################################
+# en esta funcion crearemos las diferentes graficas que necesitamos 
 def grafica():
     # abriremos el csv para poder extraer los datos para la grafica
     df = pd.read_csv('imagenes-año.csv')
@@ -165,29 +167,34 @@ def grafica():
     df['mes'] = df['date'].dt.month    # utiliza la propiedad 'dt.month' de la columna 'date' para extraer el mes correspondiente a cada fecha y lo asigna a la nueva columna 'mes'
 
     for mes in range(1, 13):# rango de los 12 meses del año
-        nombre_mes = calendar.month_name[mes]
+        # se obtiene el nombre del mes a partir de su número utilizando la función calendar.month_name[mes]
+        nombre_mes = calendar.month_name[mes] 
+        # Se filtra el df para obtener únicamente los datos correspondientes al mes actual
         datos_mes = df[df['mes'] == mes]
-        tipo_mas_frecuente = datos_mes['tipo'].mode()[0]
-        datos_tipo = datos_mes['tipo'].value_counts()
-        plt.pie(datos_tipo.values, labels=datos_tipo.index, autopct='%1.1f%%')
+        # Se determina el tipo de imagen más frecuente en el mes actual utilizando la función mode()
+        tipo_mas_frecuente = datos_mes['tipo'].mode()[0] 
+        # se cuentan los diferentes tipos de imágenes presentes en el mes actual 
+        datos_tipo = datos_mes['tipo'].value_counts() 
+        # se crea una grafica de quesitos con pie(),y autopct indica el formato del porcentaje que aparecerá en el gráfico.
+        plt.pie(datos_tipo.values, labels=datos_tipo.index, autopct='%1.1f%%') 
+        # titulo
         plt.title(f'Tipo de imagen más frecuente en el mes de {nombre_mes}')
+        # aqui se guardaran las graficas en formato png
         # plt.savefig(f'grafica_mes_{mes}.png')
+        # y por ultimo se cerrara la conexion a matplotlip
         plt.close()
-        
+
 ###################################################################################################
 # # enseñar las graficas a traves de un form con un app.route
 @app.route('/formulario',methods=['GET','POST'])
 def seleccionar_imagen():
     if request.method == 'POST':
+        # el código obtiene el valor de la opción seleccionada en el formulario
         opcion = request.form['opciones']
+        # despusharemos un render a nuestro html con la variableanterior
         return render_template('formulario.html', imagen=opcion)
     else :
         return render_template('formulario.html')
 
-
 ###################################################################
 app.run(host='Localhost', port=5000, debug=False)
-
-###################################################################################################
-# mejoras
-# cambiar el menu con js

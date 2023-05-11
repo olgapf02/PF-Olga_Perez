@@ -18,8 +18,9 @@
   <body>
     <h1>Estadisticas de que tipo de foto a avido mas en todos los meses del año 2022</h1>
 
-    <form action="/formulario" method="POST">
+    <form action="/formulario" method="POST"><!-- el metodo post servira para que pueda mostrar lo que le pedimos al formulario -->
       <select name="opciones">
+        <!-- el valor que le daremos a nuestro formulario sera las imagenes quequeremos mostrar -->
             <option value="static/graficas/año.png">Todo un año</option>
             <option value="static/graficas/grafica_mes_1.png">Enero</option>
             <option value="static/graficas/grafica_mes_2.png">febrero</option>
@@ -37,7 +38,7 @@
       </select>
       <button class="button" type="submit">Enviar</button>
     </form>
-
+<!-- para poder mostrar las imagenes una vez enviado el formulario lo haremos a traves de la variable del app route que coje las diferentes imagenes -->
     <img class="imagen" src="{{imagen}}">
 
   </body>
