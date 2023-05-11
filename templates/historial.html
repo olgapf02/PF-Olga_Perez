@@ -1,18 +1,19 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <link rel="stylesheet" href="{{url_for('static',filename='style-h.css')}}">
-    <link rel="stylesheet" href="{{url_for('static',filename='script-h.js')}}">
-    <title>Historial de imágenes</title>
-  </head>
+    <link rel="stylesheet" href="{{url_for('static',filename='style.css')}}">
+    <!-- <link rel="stylesheet" href="{{url_for('static',filename='script-I.js')}}"> -->
+    </head>
   <header>
-    <nav class="nav">
-        <ul classs ="enlaces">
-            <li class=" historia"><a href="/" >inicio </a></li>
-            <li class=" img"> <a href="/insertar-imagen-dia" >insertar-imagen-del-dia</a></li>
-        </ul> 
-    </nav>
-  </header>   
+        <div >
+            <ul classs ="enlaces">
+                <li class=" historia"><a href="/historial" >historial </a></li>
+                <li class=" img"> <a href="/insertar-imagen-dia" >insertar-imagen-del-dia</a></li>
+                <li class=" img"> <a href="/imagenes-año" >imagenes de todo un año</a></li>
+                <li class=" img"> <a href="/formulario" >formulario</a></li>
+            </ul> 
+        </div>
+  </header>
   <body>
     <table>
         <thead>

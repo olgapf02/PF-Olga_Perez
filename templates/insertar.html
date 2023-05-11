@@ -1,16 +1,18 @@
 <!DOCTYPE html>
 <html>
 	<head>
-        <link rel="stylesheet" href="{{url_for('static',filename='style-i.css')}}">
-		<title>Guardar Imagen</title>
-	</head>
-	<header>
-        <nav class="nav">
+        <link rel="stylesheet" href="{{url_for('static',filename='style.css')}}">
+        <!-- <link rel="stylesheet" href="{{url_for('static',filename='script-I.js')}}"> -->
+    </head>
+    <header>
+        <div >
             <ul classs ="enlaces">
-                <li class=" historia"><a href="/" >inicio </a></li>
-                <li class=" img"> <a href="/historial" >historial</a></li>
+                <li class=" historia"><a href="/historial" >historial </a></li>
+                <li class=" img"> <a href="/insertar-imagen-dia" >insertar-imagen-del-dia</a></li>
+                <li class=" img"> <a href="/imagenes-año" >imagenes de todo un año</a></li>
+                <li class=" img"> <a href="/formulario" >formulario</a></li>
             </ul> 
-        </nav>
+        </div>
     </header>
 	<body>
 		<h1>{{mensaje}}</h1>
