@@ -109,7 +109,7 @@ table {
   background-color: #b1e5f2;
 }
   /* ############################### */
-/* header{
+header{
   background-color: rgba(191, 204, 254, 0.903);
   display: flex;
   flex-flow: row wrap;
@@ -130,7 +130,11 @@ li{
     display: inline-block; 
     margin: 4px 2px; 
     cursor: pointer; 
-  } */
+  }
+  li:hover{
+    background-color: #093f4d; 
+
+  }
 /* ############################### */
 form {
   display: flex;
@@ -169,3 +173,5 @@ button:hover {
 h1{
   font-family: "Roboto", sans-serif;
 }
+/* ############################### */
+
